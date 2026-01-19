@@ -28,6 +28,12 @@ final class DummyPrintConnector implements PrintConnector
     private $buffer;
 
     /**
+     * @var boolean $clear_buffer
+     *  Buffer of accumilated data.
+     */
+    private $clear_buffer;
+
+    /**
      * @var string data which the printer will provide on next read
      */
     private $readData;
@@ -35,14 +41,18 @@ final class DummyPrintConnector implements PrintConnector
     /**
      * Create new print connector
      */
-    public function __construct()
+    public function __construct($clear_buffer = 1)
     {
-        $this -> buffer = [];
+        $this->buffer = [];
+
+        $this->clear_buffer = $clear_buffer;
     }
 
     public function clear()
     {
-        $this -> buffer = [];
+        if($this->clear_buffer == 1){
+            $this -> buffer = [];
+        }
     }
     
     public function __destruct()
@@ -54,7 +64,9 @@ final class DummyPrintConnector implements PrintConnector
 
     public function finalize()
     {
-        $this -> buffer = null;
+        if($this->clear_buffer == 1){
+            $this -> buffer = null;
+        }
     }
 
     /**
